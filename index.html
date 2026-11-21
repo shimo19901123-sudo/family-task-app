@@ -173,6 +173,11 @@ function showDoneTitle(){
  clearTimeout(doneTitleTimer);
  done.classList.remove('active');void done.offsetWidth;
  done.classList.add('active');
+ const chime=document.getElementById('completeChime');
+ if(chime){
+   chime.pause();chime.currentTime=0;chime.volume=1;
+   chime.play().catch(()=>{});
+ }
  doneTitleTimer=setTimeout(()=>done.classList.remove('active'),2200);
 }
 function closeCinema(){document.getElementById('voidSound').pause();const box=$('cinema'),v=$('cinemaVideo');v.pause();box.classList.remove('active');}
@@ -272,5 +277,18 @@ window.playBlackflash=function(after){
  if(typeof playKokusen==='function')playKokusen();
  timer=setTimeout(()=>{overlay.classList.remove('active');if(typeof after==='function')after();},1450);
 };
+})();
+</script><audio id="completeChime" src="complete-chime.mp3" preload="auto"></audio><script id="complete-chime-prime">
+(function(){
+ const prime=()=>{
+   const a=document.getElementById('completeChime');
+   if(!a||a.dataset.primed)return;
+   a.dataset.primed='1';
+   a.muted=true;
+   const p=a.play();
+   if(p&&p.then)p.then(()=>{a.pause();a.currentTime=0;a.muted=false;})
+                 .catch(()=>{a.muted=false;});
+ };
+ document.addEventListener('pointerdown',prime,{once:true,capture:true});
 })();
 </script></body></html>
